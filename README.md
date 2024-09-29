@@ -1,2 +1,1 @@
-"# capstone-trustme" 
-# capstone-trustme
+졸업작품 TrustMe 리팩토링을 위한 레포입니다.
