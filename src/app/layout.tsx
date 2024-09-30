@@ -1,21 +1,35 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
+// app/layout.ts
+
+import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import "../styles/globals.css";
 
-const geistSans = localFont({
-  src: "../../public/fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "../../public/fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "TrustMe",
   description: "확인 강박을 위한 심리 관리 보조 PWA 어플리케이션",
+  generator: "Next.js",
+  manifest: "/manifest.json",
+  keywords: ["nextjs", "next14", "pwa", "next-pwa"],
+  authors: [
+    {
+      name: "monicx",
+      url: "https://velog.io/@monixc",
+    },
+  ],
+  icons: [
+    { rel: "icon", url: "/images/icon-192.png" },
+    { rel: "apple-touch-icon", url: "/images/icon-192.png" },
+  ],
+};
+
+export const viewport: Viewport = {
+  themeColor: "#ffffff",
+  width: "device-width",
+  initialScale: 1,
+  minimumScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -25,9 +39,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
+      <head>{/* 기타 메타데이터 */}</head>
+      <body className={inter.className}>
+        <div
+          className="max-w-[480px] mx-auto min-h-screen bg-white
+        ">
+          {children}
+        </div>
       </body>
     </html>
   );
