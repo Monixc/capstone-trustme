@@ -1,3 +1,3 @@
 export default function QuestPage() {
-  return <main>diary</main>;
+  return <main>Quest</main>;
 }

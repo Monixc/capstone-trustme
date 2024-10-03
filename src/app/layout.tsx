@@ -1,5 +1,4 @@
 // app/layout.ts
-
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
