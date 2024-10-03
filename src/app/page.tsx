@@ -1,3 +1,10 @@
+import Splash from "@/components/Splash";
+
 export default function Home() {
-  return <main>TrustMe</main>;
+  return (
+    <>
+      <Splash />
+      <main>TrustMe</main>
+    </>
+  );
 }
