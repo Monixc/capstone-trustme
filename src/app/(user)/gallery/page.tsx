@@ -115,7 +115,7 @@ export default function GalleryPage() {
       )}
       <button
         onClick={() => setIsModalOpen(true)}
-        className="fixed bottom-20 right-4 w-14 h-14 bg-sky-500 text-white rounded-full shadow-lg flex items-center justify-center">
+        className="fixed bottom-20 right-4 w-14 h-14 bg-slate-900 text-white rounded-full shadow-lg flex items-center justify-center">
         <Plus size={24} />
       </button>
 

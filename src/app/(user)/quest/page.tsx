@@ -102,7 +102,7 @@ export default function QuestPage() {
         <h2 className="text-lg font-semibold mb-2">경험치</h2>
         <div className="w-full bg-gray-200 rounded-full h-2.5">
           <div
-            className="bg-blue-600 h-2.5 rounded-full"
+            className="bg-slate-900 h-2.5 rounded-full"
             style={{ width: `${experience % 100}%` }}></div>
         </div>
         <p className="text-sm mt-1">레벨 {Math.floor(experience / 100) + 1}</p>
@@ -151,7 +151,7 @@ export default function QuestPage() {
 
       <button
         onClick={() => setIsModalOpen(true)}
-        className="fixed bottom-20 right-4 w-14 h-14 bg-sky-500 text-white rounded-full shadow-lg flex items-center justify-center">
+        className="fixed bottom-20 right-4 w-14 h-14 bg-slate-900 text-white rounded-full shadow-lg flex items-center justify-center">
         <Plus size={24} />
       </button>
 
@@ -184,7 +184,7 @@ export default function QuestPage() {
               />
               <button
                 onClick={addQuest}
-                className="w-full bg-sky-500 text-white p-2 rounded-lg">
+                className="w-full bg-slate-900 text-white p-2 rounded-lg">
                 퀘스트 추가
               </button>
             </div>

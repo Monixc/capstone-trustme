@@ -23,12 +23,12 @@ export default function BottomNavbar() {
             <Link href={item.href} className="flex flex-col items-center">
               <item.icon
                 className={`w-6 h-6 ${
-                  pathname === item.href ? "text-sky-500" : "text-gray-500"
+                  pathname === item.href ? "text-slate-900" : "text-slate-400"
                 }`}
               />
               <span
                 className={`text-xs ${
-                  pathname === item.href ? "text-sky-500" : "text-gray-500"
+                  pathname === item.href ? "text-slate-900" : "text-slate-400"
                 }`}>
                 {item.label}
               </span>

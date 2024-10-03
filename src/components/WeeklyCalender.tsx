@@ -58,9 +58,9 @@ const WeeklyCalendar: React.FC = () => {
             key={index}
             className={`text-center cursor-pointer p-2 rounded-full ${
               date.toDateString() === selectedDate.toDateString()
-                ? "bg-sky-500 text-white"
+                ? "bg-slate-900 text-white"
                 : date.toDateString() === new Date().toDateString()
-                ? "text-sky-500"
+                ? "text-slate-900"
                 : ""
             }`}
             onClick={() => handleDateClick(date)}>

@@ -109,7 +109,7 @@ export default function HomePage() {
                   handleTitleChange(checklistIndex, e.target.value)
                 }
                 onBlur={handleTitleBlur}
-                className="text-lg font-bold mb-2 w-full focus:outline-none focus:ring-2 focus:ring-sky-500 rounded px-2 py-1"
+                className="text-lg font-bold mb-2 w-full focus:outline-none focus:ring-2 focus:ring-slate-900 rounded px-2 py-1"
                 autoFocus
               />
             ) : (
@@ -141,7 +141,7 @@ export default function HomePage() {
               />
               <button
                 onClick={() => addItemToChecklist(checklistIndex)}
-                className="bg-sky-500 text-white px-4 py-2 rounded-r-lg hover:bg-sky-600 transition duration-150 ease-in-out">
+                className="bg-slate-900 text-white px-4 py-2 rounded-r-lg hover:bg-slate-800 transition duration-150 ease-in-out">
                 <Plus size={18} />
               </button>
             </div>
