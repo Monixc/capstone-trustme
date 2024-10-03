@@ -22,6 +22,7 @@ export default function HomePage() {
   const [checkedItems, setCheckedItems] = useState<boolean[][]>([
     defaultChecklist.map(() => false),
   ]);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   const addItemToChecklist = (checklistIndex: number) => {
     if (newItem.trim()) {
@@ -93,9 +94,18 @@ export default function HomePage() {
     setCheckedItems(updatedCheckedItems);
   };
 
+  const handleDateClick = (date: Date) => {
+    setSelectedDate(date);
+    // 여기에 선택된 날짜에 따른 체크리스트 로드 로직을 추가할 수 있습니다.
+    console.log("선택된 날짜:", date);
+  };
+
   return (
     <main className="p-4 bg-gray-100">
-      <WeeklyCalendar />
+      <WeeklyCalendar
+        onDateClick={handleDateClick}
+        selectedDate={selectedDate}
+      />
       <div className="mt-4 space-y-4">
         {checklists.map((checklist, checklistIndex) => (
           <div

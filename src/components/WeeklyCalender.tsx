@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const WeeklyCalendar: React.FC = () => {
+interface WeeklyCalendarProps {
+  onDateClick: (date: Date) => void;
+  selectedDate: Date;
+}
+
+const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
+  onDateClick,
+  selectedDate,
+}) => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const getWeekDates = (date: Date) => {
     const dates: Date[] = [];
@@ -19,7 +26,7 @@ const WeeklyCalendar: React.FC = () => {
   };
 
   const handleDateClick = (date: Date) => {
-    setSelectedDate(date);
+    onDateClick(date);
     // 여기에 선택된 날짜에 대한 추가 로직을 구현할 수 있습니다.
     // 예: 부모 컴포넌트에 선택된 날짜 전달
   };
