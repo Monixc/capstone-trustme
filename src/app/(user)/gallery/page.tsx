@@ -20,16 +20,26 @@ export default function GalleryPage() {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
+        // EXIF 데이터를 읽어 촬영 날짜를 가져오는 함수 (별도로 구현 필요)
+        const takenDate = getImageTakenDate(file) || file.lastModified;
         const newImage: GalleryImage = {
           id: Date.now().toString(),
           url: e.target?.result as string,
-          date: new Date().toISOString(),
+          date: new Date(takenDate).toISOString(),
         };
         setImages((prevImages) => [...prevImages, newImage]);
       };
       reader.readAsDataURL(file);
     }
     setIsModalOpen(false);
+  };
+
+  // EXIF 데이터에서 촬영 날짜를 추출하는 함수 (예시)
+  const getImageTakenDate = (file: File): number | null => {
+    // 여기에 EXIF 데이터를 읽는 로직을 구현해야 합니다.
+    // 실제 구현은 별도의 라이브러리(예: exif-js)를 사용하는 것이 좋습니다.
+    // 이 예시에서는 간단히 파일의 lastModified를 반환합니다.
+    return file.lastModified;
   };
 
   const groupedImages = images.reduce((acc, image) => {
