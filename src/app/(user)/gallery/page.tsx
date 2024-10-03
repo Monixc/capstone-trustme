@@ -15,31 +15,46 @@ export default function GalleryPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        // EXIF 데이터를 읽어 촬영 날짜를 가져오는 함수 (별도로 구현 필요)
-        const takenDate = getImageTakenDate(file) || file.lastModified;
-        const newImage: GalleryImage = {
-          id: Date.now().toString(),
-          url: e.target?.result as string,
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = event.target.files;
+    if (files) {
+      const newImages: GalleryImage[] = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const imageData = await readFileAsDataURL(file);
+        const takenDate = await getImageTakenDate(file);
+
+        newImages.push({
+          id: Date.now().toString() + i,
+          url: imageData,
           date: new Date(takenDate).toISOString(),
-        };
-        setImages((prevImages) => [...prevImages, newImage]);
-      };
-      reader.readAsDataURL(file);
+        });
+      }
+
+      setImages((prevImages) => [...prevImages, ...newImages]);
     }
     setIsModalOpen(false);
   };
 
-  // EXIF 데이터에서 촬영 날짜를 추출하는 함수 (예시)
-  const getImageTakenDate = (file: File): number | null => {
-    // 여기에 EXIF 데이터를 읽는 로직을 구현해야 합니다.
-    // 실제 구현은 별도의 라이브러리(예: exif-js)를 사용하는 것이 좋습니다.
-    // 이 예시에서는 간단히 파일의 lastModified를 반환합니다.
-    return file.lastModified;
+  const readFileAsDataURL = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target?.result as string);
+      reader.onerror = (e) => reject(e);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const getImageTakenDate = (file: File): Promise<number> => {
+    return new Promise((resolve) => {
+      // 여기에 EXIF 데이터를 읽는 로직을 구현해야 합니다.
+      // 실제 구현은 별도의 라이브러리(예: exif-js)를 사용하는 것이 좋습니다.
+      // 이 코드에서는 간단히 파일의 lastModified를 반환합니다.
+      resolve(file.lastModified);
+    });
   };
 
   const groupedImages = images.reduce((acc, image) => {
@@ -124,6 +139,7 @@ export default function GalleryPage() {
                 id="galleryUpload"
                 type="file"
                 accept="image/*"
+                multiple // 여러 파일 선택 가능하도록 추가
                 onChange={handleImageUpload}
                 className="hidden"
               />
