@@ -1,3 +1,3 @@
 export default function LoginPage() {
-  return <main>diary</main>;
+  return <main>login</main>;
 }
