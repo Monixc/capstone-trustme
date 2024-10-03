@@ -9,7 +9,7 @@ const navItems = [
   { icon: Image, label: "갤러리", href: "/gallery" },
   { icon: Target, label: "퀘스트", href: "/quest" },
   { icon: Book, label: "다이어리", href: "/diary" },
-  { icon: User, label: "마이페이지", href: "/mypage" },
+  { icon: User, label: "MY", href: "/mypage" },
 ];
 
 export default function BottomNavbar() {
