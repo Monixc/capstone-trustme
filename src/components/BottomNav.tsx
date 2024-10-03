@@ -8,7 +8,7 @@ const navItems = [
   { icon: Home, label: "홈", href: "/home" },
   { icon: Image, label: "갤러리", href: "/gallery" },
   { icon: Target, label: "퀘스트", href: "/quest" },
-  { icon: Book, label: "다이어리", href: "/diary" },
+  { icon: Book, label: "일기", href: "/diary" },
   { icon: User, label: "MY", href: "/mypage" },
 ];
 
