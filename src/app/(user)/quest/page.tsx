@@ -118,19 +118,25 @@ export default function QuestPage() {
         <p className="mt-2">
           본 퀘스트는 노출반응예방치료(ERP)를 기반으로 제시되는 것입니다. 이는
           일반적인 가이드라인이며, 개인의 상황에 따라 효과가 다를 수 있습니다.
-          심각한 증상이 있다면 반드시 전문가와 상담하시기 바랍니다.
+          심각한 증상이 있다면 반드시 전문가와 상담하시기 바랍ㄴ니다.
         </p>
       </div>
 
       <ul className="space-y-4">
         {quests.map((quest) => (
-          <li key={quest.id} className="bg-white p-4 rounded-lg shadow">
+          <li
+            key={quest.id}
+            className="bg-white p-4 rounded-lg shadow cursor-pointer"
+            onClick={() => toggleDescription(quest.id)}>
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
+              <div className="flex items-center flex-grow">
                 <input
                   type="checkbox"
                   checked={quest.completed}
-                  onChange={() => !quest.completed && toggleQuest(quest.id)}
+                  onChange={(e) => {
+                    e.stopPropagation();
+                    !quest.completed && toggleQuest(quest.id);
+                  }}
                   className="mr-3"
                   disabled={quest.completed}
                 />
@@ -138,7 +144,12 @@ export default function QuestPage() {
                   {quest.title}
                 </span>
               </div>
-              <button onClick={() => toggleDescription(quest.id)}>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleDescription(quest.id);
+                }}
+                className="ml-2 flex-shrink-0">
                 {expandedQuest === quest.id ? <ChevronUp /> : <ChevronDown />}
               </button>
             </div>
