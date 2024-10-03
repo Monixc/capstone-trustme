@@ -41,10 +41,10 @@ export default function RootLayout({
     <html lang="en">
       <head>{/* 기타 메타데이터 */}</head>
       <body className={inter.className}>
-        <div
-          className="max-w-[480px] mx-auto min-h-screen bg-white
-        ">
-          {children}
+        <div className="flex justify-center items-center min-h-screen bg-gray-200">
+          <div className="w-full max-w-[480px] min-h-screen bg-white shadow-md overflow-hidden flex flex-col items-center justify-center">
+            {children}
+          </div>
         </div>
       </body>
     </html>
