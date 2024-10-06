@@ -154,7 +154,7 @@ export default function HomePage() {
         {checklists.map((checklist, checklistIndex) => (
           <div
             key={checklistIndex}
-            className="bg-white rounded-xl p-4 shadow-md relative overflow-hidden">
+            className="bg-white rounded-xl p-4 shadow-md relative overflow-visible">
             <div
               className={`absolute left-0 top-0 bottom-0 w-3 ${checklistColors[checklistIndex]} rounded-l-xl`}></div>
             <div className="ml-4">
