@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { Edit2, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const tissueImages = [
   "/images/Teru_basic.png",
@@ -20,11 +21,16 @@ const tissueImages = [
 ];
 
 export default function MyPage() {
+  const router = useRouter();
   const [currentTissueImage, setCurrentTissueImage] = useState(tissueImages[0]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const handleProfileManage = () => {
+    router.push("/mypage/edit");
+  };
 
   return (
     <main className="flex flex-col items-center p-4 bg-gray-100 min-h-screen">
@@ -33,7 +39,6 @@ export default function MyPage() {
           <div className="w-16 h-16 bg-gray-300 rounded-full mr-4"></div>
           <h2 className="text-xl font-semibold">사용자 이름</h2>
         </div>
-        <Edit2 className="text-gray-500 cursor-pointer" />
       </div>
 
       <div className="w-full max-w-md aspect-square relative rounded-2xl overflow-hidden mb-6">
@@ -96,11 +101,17 @@ export default function MyPage() {
       )}
 
       <ul className="w-full max-w-md bg-white rounded-2xl shadow-md overflow-hidden">
-        {["설정", "프로필 관리", "알림 설정", "로그아웃"].map((item, index) => (
+        {[
+          { label: "설정", action: () => console.log("설정") },
+          { label: "프로필 관리", action: handleProfileManage },
+          { label: "알림 설정", action: () => console.log("알림 설정") },
+          { label: "로그아웃", action: () => console.log("로그아웃") },
+        ].map((item, index) => (
           <li
             key={index}
+            onClick={item.action}
             className="py-4 px-6 border-b last:border-b-0 hover:bg-gray-50 cursor-pointer">
-            {item}
+            {item.label}
           </li>
         ))}
       </ul>
