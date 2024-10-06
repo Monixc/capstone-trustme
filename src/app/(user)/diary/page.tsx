@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import WeeklyCalendar from "@/components/WeeklyCalender";
 import { Book, Save, BarChart2, Edit } from "lucide-react";
 
@@ -19,6 +19,8 @@ export default function DiaryPage() {
     content: string;
     mood: string | null;
   } | null>(null);
+  const titleInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     // 페이지 로드 시 오늘 날짜의 일기 내용을 불러오는 로직
@@ -86,12 +88,44 @@ export default function DiaryPage() {
     setSavedDiary(null);
   };
 
+  const handleTitleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setDiaryTitle(e.target.value);
+    },
+    []
+  );
+
+  const handleContentChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setDiaryContent(e.target.value);
+      setShowWarning(false);
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (titleInputRef.current) {
+      titleInputRef.current.focus();
+      const length = titleInputRef.current.value.length;
+      titleInputRef.current.setSelectionRange(length, length);
+    }
+  }, [diaryTitle]);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+      const length = textareaRef.current.value.length;
+      textareaRef.current.setSelectionRange(length, length);
+    }
+  }, [diaryContent]);
+
   const DiaryInput = () => (
     <>
       <input
+        ref={titleInputRef}
         type="text"
         value={diaryTitle}
-        onChange={(e) => setDiaryTitle(e.target.value)}
+        onChange={handleTitleChange}
         placeholder="일기 제목"
         className="w-full text-2xl font-bold mb-2 focus:outline-none"
       />
@@ -135,12 +169,10 @@ export default function DiaryPage() {
         </div>
       </div>
       <textarea
+        ref={textareaRef}
         className="w-full h-64 p-4 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-slate-900"
         value={diaryContent}
-        onChange={(e) => {
-          setDiaryContent(e.target.value);
-          setShowWarning(false);
-        }}
+        onChange={handleContentChange}
         placeholder="오늘의 일기를 작성해주세요..."
       />
       {showWarning && <p className="text-red-500 mb-2">내용을 입력해주세요.</p>}
@@ -193,7 +225,7 @@ export default function DiaryPage() {
           )}
           <button
             onClick={handleAnalyzeDiary}
-            className="px-4 py-2 bg-sky-600 text-white rounded-lg flex items-center hover:bg-sky-700 transition duration-150 ease-in-out">
+            className="px-4 py-2 bg-purple-600 text-white rounded-lg flex items-center hover:bg-purple-900 transition duration-150 ease-in-out">
             <BarChart2 className="mr-2" size={18} />
             분석하기
           </button>
