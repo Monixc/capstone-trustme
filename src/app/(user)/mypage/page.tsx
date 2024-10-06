@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { Edit2, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const tissueImages = [
@@ -33,7 +33,7 @@ export default function MyPage() {
   };
 
   return (
-    <main className="flex flex-col items-center p-4 bg-gray-100 min-h-screen">
+    <main className="flex flex-col items-center p-4 bg-white min-h-screen">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-md p-6 mb-6 flex items-center justify-between">
         <div className="flex items-center">
           <div className="w-16 h-16 bg-gray-300 rounded-full mr-4"></div>

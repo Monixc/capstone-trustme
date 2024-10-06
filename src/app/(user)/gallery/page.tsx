@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Camera, Image as ImageIcon, Plus, X } from "lucide-react";
 import Image from "next/image";
 
@@ -14,6 +14,9 @@ export default function GalleryPage() {
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -80,6 +83,12 @@ export default function GalleryPage() {
     )}`;
   };
 
+  const handleCameraCapture = () => {
+    if (cameraInputRef.current) {
+      cameraInputRef.current.click();
+    }
+  };
+
   return (
     <main className="p-4 bg-gray-100 min-h-screen relative pb-20">
       {Object.entries(groupedImages).length > 0 ? (
@@ -139,14 +148,25 @@ export default function GalleryPage() {
                 id="galleryUpload"
                 type="file"
                 accept="image/*"
-                multiple // 여러 파일 선택 가능하도록 추가
+                multiple
                 onChange={handleImageUpload}
                 className="hidden"
+                ref={fileInputRef}
               />
-              <button className="flex items-center justify-center w-full py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-150 ease-in-out">
+              <button
+                onClick={handleCameraCapture}
+                className="flex items-center justify-center w-full py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-150 ease-in-out">
                 <Camera size={20} className="mr-2" />
                 카메라로 촬영
               </button>
+              <input
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onChange={handleImageUpload}
+                className="hidden"
+                ref={cameraInputRef}
+              />
             </div>
           </div>
         </div>
