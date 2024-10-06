@@ -148,7 +148,7 @@ export default function DiaryPage() {
   );
 
   return (
-    <main className="p-4 bg-gray-100 min-h-screen">
+    <main className="p-4 bg-white min-h-screen">
       <div className="mb-6">
         <WeeklyCalendar
           onDateClick={handleDateClick}

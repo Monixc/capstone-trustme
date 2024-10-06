@@ -145,7 +145,7 @@ export default function HomePage() {
   };
 
   return (
-    <main className="p-4 bg-gray-100">
+    <main className="p-4 bg-white">
       <WeeklyCalendar
         onDateClick={handleDateClick}
         selectedDate={selectedDate}
