@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import WeeklyCalendar from "@/components/WeeklyCalender";
-import { Book, Save, BarChart2, Edit } from "lucide-react";
+import { Save, BarChart2, Edit } from "lucide-react";
 
 const moodEmojis = ["😊", "😃", "😐", "😔", "😡", "☀️", "⛅", "🌇", "🌙", "🌕"];
 
