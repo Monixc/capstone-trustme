@@ -1,5 +1,4 @@
 // app/layout.ts
-
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
@@ -39,14 +38,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>{/* 기타 메타데이터 */}</head>
-      <body className={inter.className}>
-        <div
-          className="max-w-[480px] mx-auto min-h-screen bg-white
-        ">
-          {children}
-        </div>
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
