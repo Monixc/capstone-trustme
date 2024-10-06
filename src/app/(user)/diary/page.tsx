@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import WeeklyCalendar from "@/components/WeeklyCalender";
-import { Book, Save, BarChart2 } from "lucide-react";
+import { Book, Save, BarChart2, Edit } from "lucide-react";
 
 const moodEmojis = ["😊", "😃", "😐", "😔", "😡"];
 
@@ -14,17 +14,39 @@ export default function DiaryPage() {
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [showMoodSelector, setShowMoodSelector] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
+  const [savedDiary, setSavedDiary] = useState<{
+    title: string;
+    content: string;
+    mood: string | null;
+  } | null>(null);
 
   useEffect(() => {
     // 페이지 로드 시 오늘 날짜의 일기 내용을 불러오는 로직
-    console.log("오늘 날짜의 일기 내용을 불러옵니다.");
+    loadDiaryForDate(new Date());
   }, []);
+
+  const loadDiaryForDate = (date: Date) => {
+    // 여기에서 실제로 해당 날짜의 일기를 불러오는 로직을 구현
+    // 지금은 임시로 랜덤하게 일기가 있거나 없는 상태 구현
+    const hasDiary = Math.random() > 0.5;
+    if (hasDiary) {
+      setSavedDiary({
+        title: `${date.toLocaleDateString()} 일기`,
+        content: "이날의 일기 내용입니다...",
+        mood: moodEmojis[Math.floor(Math.random() * moodEmojis.length)],
+      });
+    } else {
+      setSavedDiary(null);
+    }
+    setDiaryTitle("");
+    setDiaryContent("");
+    setSelectedMood(null);
+  };
 
   const handleDateClick = (date: Date) => {
     setSelectedDate(date);
     setAnalysisResult(null);
-    // 여기에서 선택된 날짜에 해당하는 일기 내용을 불러오는 로직 추가
-    console.log("선택된 날짜의 일기 내용을 불러옵니다:", date);
+    loadDiaryForDate(date);
   };
 
   const handleSaveDiary = () => {
@@ -39,11 +61,16 @@ export default function DiaryPage() {
       content: diaryContent,
       mood: selectedMood,
     });
-    // 저장 후 사용자에게 피드백을 주는 로직 (예: 토스트 메시지) 추가
+    setSavedDiary({
+      title: diaryTitle,
+      content: diaryContent,
+      mood: selectedMood,
+    });
   };
 
   const handleAnalyzeDiary = () => {
-    if (diaryContent.trim() === "") {
+    const contentToAnalyze = savedDiary ? savedDiary.content : diaryContent;
+    if (!contentToAnalyze || contentToAnalyze.trim() === "") {
       setShowWarning(true);
       return;
     }
@@ -51,6 +78,66 @@ export default function DiaryPage() {
     // 실제 API 연동 전 임시 분석 결과
     setAnalysisResult("일기 분석 결과가 여기에 표시됩니다.");
   };
+
+  const handleEdit = () => {
+    setDiaryTitle(savedDiary?.title || "");
+    setDiaryContent(savedDiary?.content || "");
+    setSelectedMood(savedDiary?.mood || null);
+    setSavedDiary(null);
+  };
+
+  const DiaryInput = () => (
+    <>
+      <input
+        type="text"
+        value={diaryTitle}
+        onChange={(e) => setDiaryTitle(e.target.value)}
+        placeholder="일기 제목"
+        className="w-full text-2xl font-bold mb-2 focus:outline-none"
+      />
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-gray-600">
+          {selectedDate.toLocaleDateString("ko-KR", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </p>
+        <div className="relative">
+          <button
+            onClick={() => setShowMoodSelector(!showMoodSelector)}
+            className="text-2xl">
+            {selectedMood || "😊"}
+          </button>
+          {showMoodSelector && (
+            <div className="absolute right-0 mt-2 bg-white rounded-lg shadow-md p-2 flex space-x-2">
+              {moodEmojis.map((emoji) => (
+                <button
+                  key={emoji}
+                  onClick={() => {
+                    setSelectedMood(emoji);
+                    setShowMoodSelector(false);
+                  }}
+                  className="text-2xl hover:bg-gray-100 rounded-full p-1">
+                  {emoji}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+      <textarea
+        className="w-full h-64 p-4 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-slate-900"
+        value={diaryContent}
+        onChange={(e) => {
+          setDiaryContent(e.target.value);
+          setShowWarning(false);
+        }}
+        placeholder="오늘의 일기를 작성해주세요..."
+      />
+      {showWarning && <p className="text-red-500 mb-2">내용을 입력해주세요.</p>}
+    </>
+  );
 
   return (
     <main className="p-4 bg-gray-100 min-h-screen">
@@ -62,63 +149,40 @@ export default function DiaryPage() {
       </div>
 
       <div className="bg-white rounded-xl p-6 shadow-md max-w-2xl mx-auto">
-        <input
-          type="text"
-          value={diaryTitle}
-          onChange={(e) => setDiaryTitle(e.target.value)}
-          placeholder="일기 제목"
-          className="w-full text-2xl font-bold mb-2 focus:outline-none"
-        />
-        <div className="flex items-center justify-between mb-4">
-          <p className="text-gray-600">
-            {selectedDate.toLocaleDateString("ko-KR", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
-          <div className="relative">
-            <button
-              onClick={() => setShowMoodSelector(!showMoodSelector)}
-              className="text-2xl">
-              {selectedMood || "😊"}
-            </button>
-            {showMoodSelector && (
-              <div className="absolute right-0 mt-2 bg-white rounded-lg shadow-md p-2 flex space-x-2">
-                {moodEmojis.map((emoji) => (
-                  <button
-                    key={emoji}
-                    onClick={() => {
-                      setSelectedMood(emoji);
-                      setShowMoodSelector(false);
-                    }}
-                    className="text-2xl hover:bg-gray-100 rounded-full p-1">
-                    {emoji}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-        <textarea
-          className="w-full h-64 p-4 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-slate-900"
-          value={diaryContent}
-          onChange={(e) => {
-            setDiaryContent(e.target.value);
-            setShowWarning(false);
-          }}
-          placeholder="오늘의 일기를 작성해주세요..."
-        />
-        {showWarning && (
-          <p className="text-red-500 mb-2">내용을 입력해주세요.</p>
+        {savedDiary ? (
+          <>
+            <h2 className="text-2xl font-bold mb-2">{savedDiary.title}</h2>
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-gray-600">
+                {selectedDate.toLocaleDateString("ko-KR", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </p>
+              <span className="text-2xl">{savedDiary.mood}</span>
+            </div>
+            <p className="mb-4 whitespace-pre-wrap">{savedDiary.content}</p>
+          </>
+        ) : (
+          <DiaryInput />
         )}
         <div className="flex justify-end space-x-2">
-          <button
-            onClick={handleSaveDiary}
-            className="px-4 py-2 bg-slate-900 text-white rounded-lg flex items-center hover:bg-slate-800 transition duration-150 ease-in-out">
-            <Save className="mr-2" size={18} />
-            저장하기
-          </button>
+          {savedDiary ? (
+            <button
+              onClick={handleEdit}
+              className="px-4 py-2 bg-slate-900 text-white rounded-lg flex items-center hover:bg-slate-800 transition duration-150 ease-in-out">
+              <Edit className="mr-2" size={18} />
+              수정하기
+            </button>
+          ) : (
+            <button
+              onClick={handleSaveDiary}
+              className="px-4 py-2 bg-slate-900 text-white rounded-lg flex items-center hover:bg-slate-800 transition duration-150 ease-in-out">
+              <Save className="mr-2" size={18} />
+              저장하기
+            </button>
+          )}
           <button
             onClick={handleAnalyzeDiary}
             className="px-4 py-2 bg-sky-600 text-white rounded-lg flex items-center hover:bg-sky-700 transition duration-150 ease-in-out">
