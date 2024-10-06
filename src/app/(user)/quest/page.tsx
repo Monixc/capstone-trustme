@@ -97,7 +97,7 @@ export default function QuestPage() {
   };
 
   return (
-    <main className="p-4 bg-gray-100 min-h-screen">
+    <main className="p-4 bg-white min-h-screen">
       <div className="mb-6">
         <h2 className="text-lg font-semibold mb-2">경험치</h2>
         <div className="w-full bg-gray-200 rounded-full h-2.5">

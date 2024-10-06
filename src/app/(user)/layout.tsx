@@ -22,7 +22,7 @@ export default function UserLayout({
 
   return (
     <div
-      className={`flex justify-center items-center min-h-screen bg-gray-200 ${inter.className}`}>
+      className={`flex justify-center items-center min-h-screen bg-white ${inter.className}`}>
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-md overflow-hidden flex flex-col">
         {!isEditProfilePage && <TopNavbar />}
         <div

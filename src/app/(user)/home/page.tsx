@@ -24,7 +24,7 @@ const slateColors = [
 
 export default function HomePage() {
   const [checklists, setChecklists] = useState([defaultChecklist]);
-  const [newItem, setNewItem] = useState("");
+  const [newItems, setNewItems] = useState<string[]>([""]); // 각 체크리스트별 새 항목 입력 상태
   const [checklistTitles, setChecklistTitles] = useState(["체크리스트 1"]);
   const [editingTitle, setEditingTitle] = useState<number | null>(null);
   const [checkedItems, setCheckedItems] = useState<boolean[][]>([
@@ -37,11 +37,11 @@ export default function HomePage() {
   const [openPopupIndex, setOpenPopupIndex] = useState<number | null>(null);
 
   const addItemToChecklist = (checklistIndex: number) => {
-    if (newItem.trim()) {
+    if (newItems[checklistIndex].trim()) {
       const updatedChecklists = [...checklists];
       updatedChecklists[checklistIndex] = [
         ...updatedChecklists[checklistIndex],
-        newItem.trim(),
+        newItems[checklistIndex].trim(),
       ];
       setChecklists(updatedChecklists);
 
@@ -52,7 +52,10 @@ export default function HomePage() {
       ];
       setCheckedItems(updatedCheckedItems);
 
-      setNewItem("");
+      // 해당 체크리스트의 입력 필드만 초기화
+      const updatedNewItems = [...newItems];
+      updatedNewItems[checklistIndex] = "";
+      setNewItems(updatedNewItems);
     }
   };
 
@@ -75,6 +78,7 @@ export default function HomePage() {
     ]);
     setCheckedItems([...checkedItems, []]);
     setChecklistColors([...checklistColors, slateColors[0]]);
+    setNewItems([...newItems, ""]); // 새 체크리스트를 위한 빈 입력 상태 추가
   };
 
   const handleTitleClick = (index: number) => {
@@ -145,7 +149,7 @@ export default function HomePage() {
   };
 
   return (
-    <main className="p-4 bg-gray-100">
+    <main className="p-4 bg-white">
       <WeeklyCalendar
         onDateClick={handleDateClick}
         selectedDate={selectedDate}
@@ -231,8 +235,12 @@ export default function HomePage() {
               <div className="flex mt-2">
                 <input
                   type="text"
-                  value={newItem}
-                  onChange={(e) => setNewItem(e.target.value)}
+                  value={newItems[checklistIndex]}
+                  onChange={(e) => {
+                    const updatedNewItems = [...newItems];
+                    updatedNewItems[checklistIndex] = e.target.value;
+                    setNewItems(updatedNewItems);
+                  }}
                   placeholder="새 항목 추가"
                   className="flex-grow border rounded-l-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />

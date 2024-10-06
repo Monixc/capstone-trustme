@@ -33,7 +33,7 @@ export default function MyPage() {
   };
 
   return (
-    <main className="flex flex-col items-center p-4 bg-gray-100 min-h-screen">
+    <main className="flex flex-col items-center p-4 bg-white min-h-screen">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-md p-6 mb-6 flex items-center justify-between">
         <div className="flex items-center">
           <div className="w-16 h-16 bg-gray-300 rounded-full mr-4"></div>
