@@ -13,6 +13,7 @@ export default function DiaryPage() {
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [showMoodSelector, setShowMoodSelector] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
 
   useEffect(() => {
     // 페이지 로드 시 오늘 날짜의 일기 내용을 불러오는 로직
@@ -27,6 +28,11 @@ export default function DiaryPage() {
   };
 
   const handleSaveDiary = () => {
+    if (diaryContent.trim() === "") {
+      setShowWarning(true);
+      return;
+    }
+    setShowWarning(false);
     // 일기 저장 로직 구현
     console.log("일기 저장:", {
       title: diaryTitle,
@@ -37,6 +43,11 @@ export default function DiaryPage() {
   };
 
   const handleAnalyzeDiary = () => {
+    if (diaryContent.trim() === "") {
+      setShowWarning(true);
+      return;
+    }
+    setShowWarning(false);
     // 실제 API 연동 전 임시 분석 결과
     setAnalysisResult("일기 분석 결과가 여기에 표시됩니다.");
   };
@@ -92,9 +103,15 @@ export default function DiaryPage() {
         <textarea
           className="w-full h-64 p-4 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-slate-900"
           value={diaryContent}
-          onChange={(e) => setDiaryContent(e.target.value)}
+          onChange={(e) => {
+            setDiaryContent(e.target.value);
+            setShowWarning(false);
+          }}
           placeholder="오늘의 일기를 작성해주세요..."
         />
+        {showWarning && (
+          <p className="text-red-500 mb-2">내용을 입력해주세요.</p>
+        )}
         <div className="flex justify-end space-x-2">
           <button
             onClick={handleSaveDiary}
