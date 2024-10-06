@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import WeeklyCalendar from "@/components/WeeklyCalender";
 import { Book, Save, BarChart2, Edit } from "lucide-react";
 
-const moodEmojis = ["😊", "😃", "😐", "😔", "😡"];
+const moodEmojis = ["😊", "😃", "😐", "😔", "😡", "☀️", "⛅", "🌇", "🌙", "🌕"];
 
 export default function DiaryPage() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -110,18 +110,26 @@ export default function DiaryPage() {
             {selectedMood || "😊"}
           </button>
           {showMoodSelector && (
-            <div className="absolute right-0 mt-2 bg-white rounded-lg shadow-md p-2 flex space-x-2">
-              {moodEmojis.map((emoji) => (
-                <button
-                  key={emoji}
-                  onClick={() => {
-                    setSelectedMood(emoji);
-                    setShowMoodSelector(false);
-                  }}
-                  className="text-2xl hover:bg-gray-100 rounded-full p-1">
-                  {emoji}
-                </button>
-              ))}
+            <div className="absolute right-0 mt-2 bg-white rounded-lg shadow-md p-2">
+              <div
+                className="flex flex-wrap space-x-2"
+                style={{ width: "250px" }}>
+                {moodEmojis.map((emoji, index) => (
+                  <React.Fragment key={emoji}>
+                    {index % 5 === 0 && index !== 0 && (
+                      <div className="w-full h-2" />
+                    )}
+                    <button
+                      onClick={() => {
+                        setSelectedMood(emoji);
+                        setShowMoodSelector(false);
+                      }}
+                      className="text-2xl hover:bg-gray-100 rounded-full p-1">
+                      {emoji}
+                    </button>
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
           )}
         </div>
