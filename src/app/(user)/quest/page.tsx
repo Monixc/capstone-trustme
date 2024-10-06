@@ -135,7 +135,9 @@ export default function QuestPage() {
                   checked={quest.completed}
                   onChange={(e) => {
                     e.stopPropagation();
-                    !quest.completed && toggleQuest(quest.id);
+                    if (!quest.completed) {
+                      toggleQuest(quest.id);
+                    }
                   }}
                   className="mr-3"
                   disabled={quest.completed}
