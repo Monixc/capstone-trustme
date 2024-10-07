@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import WeeklyCalendar from "@/components/WeeklyCalender";
 import { Save, BarChart2, Edit } from "lucide-react";
 
@@ -8,8 +8,6 @@ const moodEmojis = ["😊", "😃", "😐", "😔", "😡", "☀️", "⛅", "�
 
 export default function DiaryPage() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [diaryTitle, setDiaryTitle] = useState("");
-  const [diaryContent, setDiaryContent] = useState("");
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [showMoodSelector, setShowMoodSelector] = useState(false);
@@ -19,17 +17,15 @@ export default function DiaryPage() {
     content: string;
     mood: string | null;
   } | null>(null);
+
   const titleInputRef = useRef<HTMLInputElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    // 페이지 로드 시 오늘 날짜의 일기 내용을 불러오는 로직
     loadDiaryForDate(new Date());
   }, []);
 
-  const loadDiaryForDate = (date: Date) => {
-    // 여기에서 실제로 해당 날짜의 일기를 불러오는 로직을 구현
-    // 지금은 임시로 랜덤하게 일기가 있거나 없는 상태 구현
+  const loadDiaryForDate = useCallback((date: Date) => {
     const hasDiary = Math.random() > 0.5;
     if (hasDiary) {
       setSavedDiary({
@@ -40,92 +36,64 @@ export default function DiaryPage() {
     } else {
       setSavedDiary(null);
     }
-    setDiaryTitle("");
-    setDiaryContent("");
+    if (titleInputRef.current) titleInputRef.current.value = "";
+    if (contentTextareaRef.current) contentTextareaRef.current.value = "";
     setSelectedMood(null);
-  };
+  }, []);
 
-  const handleDateClick = (date: Date) => {
-    setSelectedDate(date);
-    setAnalysisResult(null);
-    loadDiaryForDate(date);
-  };
+  const handleDateClick = useCallback(
+    (date: Date) => {
+      setSelectedDate(date);
+      setAnalysisResult(null);
+      loadDiaryForDate(date);
+    },
+    [loadDiaryForDate]
+  );
 
-  const handleSaveDiary = () => {
-    if (diaryContent.trim() === "") {
+  const handleSaveDiary = useCallback(() => {
+    const title = titleInputRef.current?.value || "";
+    const content = contentTextareaRef.current?.value || "";
+
+    if (content.trim() === "") {
       setShowWarning(true);
       return;
     }
     setShowWarning(false);
-    // 일기 저장 로직 구현
-    console.log("일기 저장:", {
-      title: diaryTitle,
-      content: diaryContent,
-      mood: selectedMood,
-    });
+    console.log("일기 저장:", { title, content, selectedMood });
     setSavedDiary({
-      title: diaryTitle,
-      content: diaryContent,
+      title,
+      content,
       mood: selectedMood,
     });
-  };
+  }, [selectedMood]);
 
-  const handleAnalyzeDiary = () => {
-    const contentToAnalyze = savedDiary ? savedDiary.content : diaryContent;
+  const handleAnalyzeDiary = useCallback(() => {
+    const contentToAnalyze = savedDiary
+      ? savedDiary.content
+      : contentTextareaRef.current?.value || "";
     if (!contentToAnalyze || contentToAnalyze.trim() === "") {
       setShowWarning(true);
       return;
     }
     setShowWarning(false);
-    // 실제 API 연동 전 임시 분석 결과
     setAnalysisResult("일기 분석 결과가 여기에 표시됩니다.");
-  };
+  }, [savedDiary]);
 
-  const handleEdit = () => {
-    setDiaryTitle(savedDiary?.title || "");
-    setDiaryContent(savedDiary?.content || "");
+  const handleEdit = useCallback(() => {
+    if (titleInputRef.current)
+      titleInputRef.current.value = savedDiary?.title || "";
+    if (contentTextareaRef.current)
+      contentTextareaRef.current.value = savedDiary?.content || "";
     setSelectedMood(savedDiary?.mood || null);
     setSavedDiary(null);
-  };
-
-  const handleTitleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setDiaryTitle(e.target.value);
-    },
-    []
-  );
-
-  const handleContentChange = useCallback(
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setDiaryContent(e.target.value);
-      setShowWarning(false);
-    },
-    []
-  );
-
-  useEffect(() => {
-    if (titleInputRef.current) {
-      titleInputRef.current.focus();
-      const length = titleInputRef.current.value.length;
-      titleInputRef.current.setSelectionRange(length, length);
-    }
-  }, [diaryTitle]);
-
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-      const length = textareaRef.current.value.length;
-      textareaRef.current.setSelectionRange(length, length);
-    }
-  }, [diaryContent]);
+  }, [savedDiary]);
 
   const DiaryInput = () => (
     <>
       <input
         ref={titleInputRef}
         type="text"
-        value={diaryTitle}
-        onChange={handleTitleChange}
+        defaultValue=""
         placeholder="일기 제목"
         className="w-full text-2xl font-bold mb-2 focus:outline-none"
       />
@@ -169,11 +137,11 @@ export default function DiaryPage() {
         </div>
       </div>
       <textarea
-        ref={textareaRef}
+        ref={contentTextareaRef}
         className="w-full h-64 p-4 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-slate-900"
-        value={diaryContent}
-        onChange={handleContentChange}
+        defaultValue=""
         placeholder="오늘의 일기를 작성해주세요..."
+        onChange={() => setShowWarning(false)}
       />
       {showWarning && <p className="text-red-500 mb-2">내용을 입력해주세요.</p>}
     </>
